@@ -13,6 +13,7 @@ export interface TodoState {
     formState: FormState.CREATE | FormState.EDIT | FormState.VIEW;
     todoList: Todo[];
     completedTodoList: Todo[];
+    unCompletedTodoList: Todo[];
     todo: Todo;
 }
 
@@ -20,6 +21,7 @@ const initialState: TodoState = {
     formState: FormState.CREATE,
     todoList: [],
     completedTodoList: [],
+    unCompletedTodoList: [],
     todo: {
         id: 0,
         title: "",
@@ -49,11 +51,15 @@ export const todoSlice = createSlice({
                 ...initialState.todo,
             };
         },
-        setCompletedTodo: (state, { payload }: PayloadAction<Todo[]>) => {
-            // const completed = payload.map((todo) => {
-            //     if (todo.status == 1) return todo;
-            // });
-            // const temp = completed.sort((a, b) => a!.createdAt!.getTime() - b!.createdAt!.getTime());
+        setUncompletedTodoList: (state, { payload }: PayloadAction<Todo[]>) => {
+            const uncompleted = payload.filter((todo) => todo.status == 0);
+            const sorted = uncompleted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+            state.unCompletedTodoList = sorted;
+        },
+        setCompletedTodoList: (state, { payload }: PayloadAction<Todo[]>) => {
+            const completed = payload.filter((todo) => todo.status == 1);
+            const sorted = completed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            state.completedTodoList = sorted;
         },
         setFormState: (state, action: PayloadAction<FormState>) => {
             state.formState = action.payload;
@@ -68,8 +74,8 @@ export const todoSlice = createSlice({
             const newTodo: Todo = {
                 ...payload,
                 id: Date.now(),
-                createdAt: generateCreateAt(),
-                // createdAt: new Date(),
+                // createdAt: generateCreateAt(),
+                createdAt: new Date().toString(),
             };
             state.todoList.push(newTodo);
         },
@@ -84,7 +90,7 @@ export const todoSlice = createSlice({
     },
 });
 
-export const { setTodoList, setCompletedTodo, setTodo, addTodo, editTodo, deleteTodo, resetTodo, setFormState } =
+export const { setTodoList, setCompletedTodoList, setUncompletedTodoList, setTodo, addTodo, editTodo, deleteTodo, resetTodo, setFormState } =
     todoSlice.actions;
 export const selectTodo = (state: RootState) => state.todo;
 
