@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { FormState, resetTodo, selectTodo, setCompletedTodo, setFormState, setTodoList } from "../redux/todo-slice";
+import { FormState, resetTodo, selectTodo, setCompletedTodoList, setFormState, setTodoList, setUncompletedTodoList } from "../redux/todo-slice";
 import { loadTodoList } from "../services/todo-service";
 import PlusIcon from "./PlusIcon";
 import TodoCard from "./TodoCard";
@@ -16,19 +16,15 @@ const TodoList = () => {
         dispatch(setTodoList(todoList));
     };
 
-    // const completedTodoList = () => {
-    //     const completed = todoState.todoList.filter(todo => todo.status == 1);
-    //     console.log(completed)
-    // }
-
     useEffect(() => {
         init();
         return () => {};
     }, []);
 
-    // useEffect(() => {
-    //     completedTodoList()
-    // }, [todoState.todoList]);
+    useEffect(() => {
+        dispatch(setUncompletedTodoList(todoState.todoList));
+        dispatch(setCompletedTodoList(todoState.todoList));
+    }, [todoState.todoList]);
 
     return (
         <div className="p-4">
@@ -50,22 +46,17 @@ const TodoList = () => {
 
             <div className="flex mb-20">
                 <div className="w-1/2 h-12 p-4">
-                    <div className="text-2xl font-semibold">Uncompleted Todo</div>
-                    {todoState.todoList.map((todo, index) =>
-                        todo.status == 0 ? <TodoCard key={index} todo={todo} onClick={toggle} /> : null
-                    )}
+                    <div className="text-2xl font-semibold">Uncomplete Todo</div>
+                    {todoState.unCompletedTodoList.map((todo, index) => (
+                        <TodoCard key={index} todo={todo} onClick={toggle} />
+                    ))}
                 </div>
                 <div className="w-1/2 h-12 p-4">
                     <div className="text-2xl font-semibold">Completed Todo</div>
-                    {todoState.todoList.map((todo, index) =>
-                        todo.status == 1 ? <TodoCard key={index} todo={todo} onClick={toggle} /> : null
-                    )}
+                    {todoState.completedTodoList.map((todo, index) => (
+                        <TodoCard key={index} todo={todo} onClick={toggle} />
+                    ))}
                 </div>
-                {
-                    todoState.completedTodoList.map((todo) => {
-                        return  <div>{todo.title}</div>
-                    })
-                }
             </div>
 
             <TodoModal visible={visible} toggle={toggle} />
