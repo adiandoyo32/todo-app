@@ -6,9 +6,9 @@ interface TodoStatusBadgeProps {
 
 const TodoStatusBadge: React.FC<TodoStatusBadgeProps> = (props) => {
     if (props.status == 1) {
-        return <span className="badge badge-success">Done</span>;
+        return <span className="badge badge-success">Completed</span>;
     } else {
-        return <span className="badge badge-danger">Progress</span>;
+        return <span className="badge badge-danger">Uncomplete</span>;
     }
 };
 

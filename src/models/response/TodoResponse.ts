@@ -14,6 +14,6 @@ export const mapTodoResponseToResponse = (response: TodoResponse): Todo => {
         title: response.title,
         description: response.description,
         status: response.status,
-        createdAt: new Date(response.createdAt).toDateString(),
+        createdAt: new Date(response.createdAt).toString(),
     };
 };
