@@ -1,4 +1,5 @@
 import { axiosIns } from "../libs/axios"
+import TodoResponse, { mapTodoResponseToResponse } from "../models/response/TodoResponse"
 import Todo from "../models/Todo"
 
 export const loadTodoList = async (): Promise<Todo[]> => {
@@ -6,5 +7,7 @@ export const loadTodoList = async (): Promise<Todo[]> => {
         method: "GET",
         url: "https://virtserver.swaggerhub.com/hanabyan/todo/1.0.0/to-do-list",
     })
-    return res.data
+    const response = res.data as TodoResponse[]
+    const todoList = response.map((data) =>  mapTodoResponseToResponse(data))
+    return todoList
 }
