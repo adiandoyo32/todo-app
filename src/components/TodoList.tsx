@@ -16,19 +16,19 @@ const TodoList = () => {
         dispatch(setTodoList(todoList));
     };
 
-    const completedTodoList = () => {
-        const completed = todoState.todoList.filter(todo => todo.status == 1);
-        console.log(completed)
-    }
+    // const completedTodoList = () => {
+    //     const completed = todoState.todoList.filter(todo => todo.status == 1);
+    //     console.log(completed)
+    // }
 
     useEffect(() => {
         init();
         return () => {};
     }, []);
 
-    useEffect(() => {
-        completedTodoList()
-    }, [todoState.todoList]);
+    // useEffect(() => {
+    //     completedTodoList()
+    // }, [todoState.todoList]);
 
     return (
         <div className="p-4">
